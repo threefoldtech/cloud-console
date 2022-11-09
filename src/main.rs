@@ -111,21 +111,18 @@ async fn handle_socket(socket: WebSocket, state: Arc<State>) {
                 .write(false)
                 .create(false)
                 .truncate(false)
-                .open("/dev/pts/6")
+                .open("/dev/pts/2")
                 .await
                 .unwrap();
             loop {
-                let mut buf = vec![0; 80];
+                let mut buf = vec![0; 320];
                 let n = reader.read(&mut buf).await.unwrap();
                 buf.truncate(n);
-                let msg = String::from_utf8(buf).unwrap();
-                eprint!("Sending message {}", msg);
                 sender
-                    .send(axum::extract::ws::Message::Text(msg))
+                    .send(axum::extract::ws::Message::Binary(buf))
                     .await
                     .unwrap();
             }
-            //io::copy(&mut reader, &mut sender).await.unwrap();
         }
     });
 
@@ -136,7 +133,7 @@ async fn handle_socket(socket: WebSocket, state: Arc<State>) {
                 .write(true)
                 .create(false)
                 .truncate(false)
-                .open("/dev/pts/6")
+                .open("/dev/pts/2")
                 .await
                 .unwrap();
             receiver
@@ -148,23 +145,13 @@ async fn handle_socket(socket: WebSocket, state: Arc<State>) {
                                 writer.write(&d).await.unwrap();
                             }
                             axum::extract::ws::Message::Text(t) => {
-                                eprint!("Got message {}", t);
                                 writer.write(&t.as_bytes()).await.unwrap();
-                                eprintln!("Forwarded data");
                             }
                             _ => {}
                         };
                     };
                 })
                 .await;
-            // let mut buf = vec![0; 80];
-            // receiver.re
-            // let n = receiver.recv(&mut buf).await.unwrap();
-            // buf.truncate(n);
-            // sender
-            //     .send(axum::extract::ws::Message::Binary(buf))
-            //     .await
-            //     .unwrap();
         }
     });
 }

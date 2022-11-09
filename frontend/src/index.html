@@ -1,35 +1,36 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<link rel="stylesheet" href="node_modules/xterm/css/xterm.css" />
+		<link rel="stylesheet" href="../node_modules/xterm/css/xterm.css" />
 		<script src="../node_modules/xterm/lib/xterm.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.js"></script>
 	</head>
 	<body>
 		<div id="terminal"></div>
 		<script>
 			var term = new Terminal({
 				cursorBlink: "block",
+				// Ideally rows and colls should be the same as the pty, need to figure
+				// out that one, however it seems to be more than 80 (or the pty don't care).
 				rows: 25,
-				cols: 80,
-				scrollback: 0,
-				logLevel: "debug",
+				cols: 160,
+				scrollback: 2000,
+				logLevel: "info",
+				minimumContractRatio: 7,
 			});
 
+			// Set up websocket, override binary data type as we don't want blobs
 			const ws = new WebSocket("ws://localhost:9999/ws");
-			var curr_line = "";
-			var entries = [];
+			ws.binaryType = "arraybuffer";
 
+			// Attach terminal
 			term.open(document.getElementById('terminal'));
 
 			ws.onmessage = msg => {
-				console.log(msg);
-				term.write(msg.data);
-				curr_line = "";
+				term.write(new Uint8Array(msg.data));
 			};
 
-			term.on("key", function(key, ev) {
-				ws.send(key);
+			term.onKey(function(key, ev) {
+				ws.send(key.key);
 			});
 		</script>
 	</body>
