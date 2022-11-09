@@ -37,24 +37,20 @@ impl State {
 
 #[tokio::main]
 async fn main() {
-    // let mut reader = OpenOptions::new()
-    //     .read(true)
-    //     .write(false)
-    //     .create(false)
-    //     .truncate(false)
-    //     .open("/dev/pts/6")
-    //     .await
-    //     .unwrap();
-    // let mut writer = OpenOptions::new()
-    //     .read(false)
-    //     .write(true)
-    //     .create(false)
-    //     .truncate(false)
-    //     .open("/dev/pts/6")
-    //     .await
-    //     .unwrap();
-    // //let (mut reader, mut writer) = io::split(file);
-
+    let mut args = std::env::args();
+    // Binary name - ignore
+    let _ = args.next();
+    let pty = args.next();
+    let bind_ip = args.next();
+    let bind_port = args.next();
+    //     if pty.is_none() || bind_ip.is_none() || bind_port.is_none() {
+    //         eprintln!(
+    //             r#"Cloud console - An interactive web based terminal connected to a pty
+    // Usage:
+    //     cloud-console <path_to_pty> <bind_ip> <bind_port>"#
+    //         );
+    //         std::process::exit(1);
+    //     }
     // let mut handles = Vec::new();
 
     // handles.push(tokio::spawn(async move {
