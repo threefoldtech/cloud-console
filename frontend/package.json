@@ -1,0 +1,14 @@
+{
+  "name": "cloud-console",
+  "version": "1.0.0",
+  "description": "Console for VM's in the cloud",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Lee Smet",
+  "license": "ISC",
+  "dependencies": {
+    "xterm": "^5.0.0"
+  }
+}

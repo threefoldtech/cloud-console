@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="node_modules/xterm/css/xterm.css" />
+		<script src="../node_modules/xterm/lib/xterm.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.js"></script>
+	</head>
+	<body>
+		<div id="terminal"></div>
+		<script>
+			var term = new Terminal({
+				cursorBlink: "block",
+				rows: 25,
+				cols: 80,
+				scrollback: 0,
+				logLevel: "debug",
+			});
+
+			const ws = new WebSocket("ws://localhost:9999/ws");
+			var curr_line = "";
+			var entries = [];
+
+			term.open(document.getElementById('terminal'));
+
+			ws.onmessage = msg => {
+				console.log(msg);
+				term.write(msg.data);
+				curr_line = "";
+			};
+
+			term.on("key", function(key, ev) {
+				ws.send(key);
+			});
+		</script>
+	</body>
+</html>
