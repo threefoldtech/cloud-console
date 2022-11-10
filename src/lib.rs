@@ -8,6 +8,9 @@ const CONNECTION_BUFFER: usize = 1000;
 
 /// An internal console buffer, multiplexing to multiple outputs. The size of the buffer is a
 /// constant parameter.
+/// The internal buffer is intentionally extremely dumb. In other words, it won't store a certain
+/// amount of lines, but rather just an amount of data. It is up to the user to guestimate how much
+/// buffer space is needed to keep the required history.
 pub struct ConsoleMux<const H: usize> {
     data: [u8; H],
     head: usize,
