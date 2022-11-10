@@ -5,21 +5,35 @@
 		<script src="../node_modules/xterm/lib/xterm.js"></script>
 	</head>
 	<body>
+		<div id="help">
+			<p>Copy data: Ctrl + Insert</p>
+			<p>Paste data: Shift + Insert</p>
+		</div>
 		<div id="terminal"></div>
 		<script>
 			var term = new Terminal({
 				cursorBlink: "block",
-				// Ideally rows and colls should be the same as the pty, need to figure
-				// out that one, however it seems to be more than 80 (or the pty don't care).
+				// 25 rows 80 colls, the same as a default serial console.
 				rows: 25,
-				cols: 160,
+				cols: 80,
 				scrollback: 2000,
-				logLevel: "info",
+				logLevel: "off",
 				minimumContractRatio: 7,
 			});
 
+			console.log(window.location);
+			console.log(window.location.host);
+			console.log(window.location.protocol);
+
+			// Ugly site construction
+			var site;
+			if (!window.location.host) {
+				site = "localhost:9999";
+			} else {
+				site = window.location.host;
+			}
 			// Set up websocket, override binary data type as we don't want blobs
-			const ws = new WebSocket("ws://localhost:9999/ws");
+			const ws = new WebSocket("ws://" + site + "/ws");
 			ws.binaryType = "arraybuffer";
 
 			// Attach terminal
@@ -29,8 +43,12 @@
 				term.write(new Uint8Array(msg.data));
 			};
 
-			term.onKey(function(key, ev) {
-				ws.send(key.key);
+			// Use onData instead of onKey, this also fires when something is pasted
+			// into the console.
+			// onKey on the other hand fires when keys are pressed and seems to be
+			// used more to override individual key functionality.
+			term.onData(function(data, ev) {
+				ws.send(data);
 			});
 		</script>
 	</body>
