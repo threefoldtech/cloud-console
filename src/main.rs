@@ -27,7 +27,7 @@ const CONSOLE_BUFFER: usize = 80 * 2000;
 const WRITE_BACKLOG: usize = 100;
 
 #[derive(RustEmbed)]
-#[folder = "frontend/public"]
+#[folder = "frontend/dist"]
 struct Assets;
 
 /// Application shared state between handlers.
