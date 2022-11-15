@@ -16,7 +16,7 @@ use tokio::{
 };
 use tower_http::compression::CompressionLayer;
 
-use std::{net::SocketAddr, sync::Arc};
+use std::{net::SocketAddr, sync::Arc, time::Duration};
 
 /// 80 columns, 2000 rows. Technically the Mux does not track rows but just a byte array. This is
 ///    a sane default as such: a single column can contain up to 4 bytes (since it is unicode),
@@ -102,8 +102,12 @@ async fn main() {
     tokio::spawn(async move {
         while let Some(data) = rx.recv().await {
             if let Err(e) = writer.write_all(&data).await {
+                // Consider this to be fatal
                 eprintln!("Could not forward data to pty {}", e);
-                return;
+                // Sleep for a couple of seconds to allow clients to get the latest state of the
+                // console mux.
+                tokio::time::sleep(Duration::from_secs(5)).await;
+                std::process::exit(2);
             }
         }
     });
@@ -118,11 +122,12 @@ async fn main() {
             let n = match reader.read(&mut buffer).await {
                 Ok(n) => n,
                 Err(e) => {
-                    // TODO: This is actually fatal. In an ideal world, we would close down the
-                    // console mux,flushing all pending data to remotes, then exit the application.
-                    // Might have to add a flag on state which prevents new connections.
+                    // This cleanup is not ideal but sufficient for our usecase
                     eprintln!("Could not read from pty {}", e);
-                    return;
+                    // Sleep for a couple of seconds to allow clients to get the latest state of the
+                    // console mux.
+                    tokio::time::sleep(Duration::from_secs(5)).await;
+                    std::process::exit(2);
                 }
             };
             // Forward data to console mux.
