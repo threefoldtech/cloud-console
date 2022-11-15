@@ -12,3 +12,8 @@ futures = "0.3"
 rust-embed = "6.4.2"
 mime_guess = "2"
 tower-http = { version = "0.3", features = ["compression-gzip"] }
+
+[profile.release]
+lto = "fat"
+opt = 3
+codegen-units = 1
