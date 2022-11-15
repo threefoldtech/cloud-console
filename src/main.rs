@@ -13,6 +13,7 @@ use tokio::{
     fs::OpenOptions,
     io::{AsyncReadExt, AsyncWriteExt},
     sync::{mpsc, Mutex},
+    time,
 };
 use tower_http::compression::CompressionLayer;
 
@@ -106,7 +107,7 @@ async fn main() {
                 eprintln!("Could not forward data to pty {}", e);
                 // Sleep for a couple of seconds to allow clients to get the latest state of the
                 // console mux.
-                tokio::time::sleep(Duration::from_secs(5)).await;
+                time::sleep(Duration::from_secs(5)).await;
                 std::process::exit(2);
             }
         }
