@@ -73,6 +73,8 @@ async fn main() {
     } else {
         print_usage_and_exit()
     };
+    // Optional log file
+    let log_file = args.next();
     let addr = SocketAddr::new(bind_ip.parse().unwrap(), bind_port.parse().unwrap());
 
     // Open the pty file handle twice, one for reading and one for writing. Opening it in both read
@@ -127,6 +129,19 @@ async fn main() {
             console.lock().await.write_data(&buffer[..n]);
         }
     });
+
+    // If there is a log file, attach it to the mux to receive the console output as well.
+    if let Some(log_file) = log_file {
+        let file = OpenOptions::new()
+            .read(false)
+            .write(true)
+            .create(true)
+            .truncate(false)
+            .open(log_file)
+            .await
+            .unwrap();
+        state.inner.lock().await.attach_remote(file).await;
+    };
 
     let app = Router::new()
         .route("/", get(index))
@@ -205,7 +220,7 @@ fn print_usage_and_exit() -> ! {
     eprintln!(
         r#"Cloud console - An interactive web based terminal connected to a pty
     Usage:
-        cloud-console <path_to_pty> <bind_ip> <bind_port>"#
+        cloud-console <path_to_pty> <bind_ip> <bind_port> [<log_file>]"#
     );
     std::process::exit(1);
 }
