@@ -15,5 +15,5 @@ tower-http = { version = "0.3", features = ["compression-gzip"] }
 
 [profile.release]
 lto = "fat"
-opt = 3
+opt-level = 3
 codegen-units = 1
