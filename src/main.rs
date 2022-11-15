@@ -54,7 +54,7 @@ impl State {
     }
 }
 
-#[tokio::main]
+#[tokio::main(flavor = "current_thread")]
 async fn main() {
     let mut args = std::env::args();
     // Binary name - ignore
