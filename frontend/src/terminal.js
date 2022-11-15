@@ -10,19 +10,8 @@ const term = new Terminal({
 	minimumContractRatio: 7,
 });
 
-console.log(window.location);
-console.log(window.location.host);
-console.log(window.location.protocol);
-
-// Ugly site construction
-let site;
-if (!window.location.host) {
-	site = "localhost:9999";
-} else {
-	site = window.location.host;
-}
 // Set up websocket, override binary data type as we don't want blobs
-const ws = new WebSocket("ws://" + site + "/ws");
+const ws = new WebSocket("ws://" + window.location.host + "/ws");
 ws.binaryType = "arraybuffer";
 
 // Attach terminal
