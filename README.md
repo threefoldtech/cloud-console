@@ -38,6 +38,20 @@ To build a static linux release binary, run
 cargo build --release --target x86_64-unknown-linux-musl
 ```
 
+## Running
+
+The binary expects at least 3 arguments, with an optional 4th:
+
+```bash
+cloud-console <path_to_pty> <bind_ip> <bind_port> [<log_file>]
+```
+
+- `path_to_pty`: The path to the `pty` device file to connect to
+- `bind_ip`: The IP address to bind the server to
+- `bind_port`: The port to use for the server
+- `log_file`: This is optional, if it is set, this file will be opened (created if needed), and attached as reader to the multiplexer. All data sent by
+	the `pty` will be written in the file. Can be used for debug purposed.
+
 ## Contributing
 
 Unless you explicitly state otherwise, any contribution intentionally submitted
