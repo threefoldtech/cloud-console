@@ -22,7 +22,8 @@ use std::{net::SocketAddr, sync::Arc, time::Duration};
 /// 80 columns, 2000 rows. Technically the Mux does not track rows but just a byte array. This is
 ///    a sane default as such: a single column can contain up to 4 bytes (since it is unicode),
 ///    however not all rows will be completely filled. Most will indeed only be partially used.
-const CONSOLE_BUFFER: usize = 80 * 2000;
+///    As such, 40 bytes per line on average should be rather sufficient.
+const CONSOLE_BUFFER: usize = 80 / 2 * 2000;
 /// Amount of data fragments from remotes to buffer while forwarding to the pty. If there are more
 /// than this amount queued, new writes from remotes will block. Not sure if this is even needed.
 const WRITE_BACKLOG: usize = 100;
