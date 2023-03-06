@@ -13,11 +13,10 @@ use tokio::{
     fs::OpenOptions,
     io::{AsyncReadExt, AsyncWriteExt},
     sync::{mpsc, Mutex},
-    time,
 };
 use tower_http::compression::CompressionLayer;
 
-use std::{net::SocketAddr, sync::Arc, time::Duration};
+use std::{net::SocketAddr, sync::Arc};
 
 /// 80 columns, 2000 rows. Technically the Mux does not track rows but just a byte array. This is
 ///    a sane default as such: a single column can contain up to 4 bytes (since it is unicode),
