@@ -50,7 +50,7 @@ cloud-console <path_to_pty> <bind_ip> <bind_port> [<log_file>]
 - `bind_ip`: The IP address to bind the server to
 - `bind_port`: The port to use for the server
 - `log_file`: This is optional, if it is set, this file will be opened (created if needed), and attached as reader to the multiplexer. All data sent by
-	the `pty` will be written in the file. Can be used for debug purposed.
+ the `pty` will be written in the file. Can be used for debug purposed.
 
 ## Contributing
 
@@ -61,6 +61,7 @@ dual licensed as below, without any additional terms or conditions.
 ## License
 
 &copy; 2022 Lee Smet
+&copy; 2023 TF TECH NV
 
 This project is licensed under either of
 
