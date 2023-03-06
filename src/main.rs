@@ -106,9 +106,6 @@ async fn main() {
             if let Err(e) = writer.write_all(&data).await {
                 // Consider this to be fatal
                 eprintln!("Could not forward data to pty {}", e);
-                // Sleep for a couple of seconds to allow clients to get the latest state of the
-                // console mux.
-                time::sleep(Duration::from_secs(5)).await;
                 std::process::exit(2);
             }
         }
@@ -126,9 +123,6 @@ async fn main() {
                 Err(e) => {
                     // This cleanup is not ideal but sufficient for our usecase
                     eprintln!("Could not read from pty {}", e);
-                    // Sleep for a couple of seconds to allow clients to get the latest state of the
-                    // console mux.
-                    tokio::time::sleep(Duration::from_secs(5)).await;
                     std::process::exit(2);
                 }
             };
