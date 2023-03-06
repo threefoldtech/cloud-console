@@ -135,6 +135,12 @@ impl<const H: usize> ConsoleMux<H> {
     }
 }
 
+impl<const H: usize> Default for ConsoleMux<H> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

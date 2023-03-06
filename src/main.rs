@@ -195,13 +195,11 @@ async fn handle_socket(socket: WebSocket, state: State) {
                             axum::extract::ws::Message::Binary(d) => {
                                 if let Err(e) = state.data_sender.send(d).await {
                                     eprintln!("Could not send data to pty forwarder {}", e);
-                                    return;
                                 }
                             }
                             axum::extract::ws::Message::Text(t) => {
                                 if let Err(e) = state.data_sender.send(t.into_bytes()).await {
                                     eprintln!("Could not send data to pty forwarder {}", e);
-                                    return;
                                 }
                             }
                             m => {
