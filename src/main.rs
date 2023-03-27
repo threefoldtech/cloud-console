@@ -134,9 +134,9 @@ async fn main() {
     if let Some(log_file) = log_file {
         let file = OpenOptions::new()
             .read(false)
-            .write(true)
             .create(true)
             .truncate(false)
+            .append(true)
             .open(log_file)
             .await
             .unwrap();
