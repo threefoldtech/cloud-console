@@ -52,24 +52,4 @@ cloud-console <path_to_pty> <bind_ip> <bind_port> [<log_file>]
 - `log_file`: This is optional, if it is set, this file will be opened (created if needed), and attached as reader to the multiplexer. All data sent by
  the `pty` will be written in the file. Can be used for debug purposed.
 
-## Contributing
 
-Unless you explicitly state otherwise, any contribution intentionally submitted
-for inclusion in the work by you, as defined in the Apache-2.0 license, shall be
-dual licensed as below, without any additional terms or conditions.
-
-## License
-
-&copy; 2022 Lee Smet
-&copy; 2023 TF TECH NV
-
-This project is licensed under either of
-
-- [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0) ([`LICENSE-APACHE`](LICENSE-APACHE))
-- [MIT license](https://opensource.org/licenses/MIT) ([`LICENSE-MIT`](LICENSE-MIT))
-
-at your option.
-
-The [SPDX](https://spdx.dev) license identifier for this project is `MIT OR Apache-2.0`.
-
-[cloud-hypervisor]: https://github.com/cloud-hypervisor/cloud-hypervisor
